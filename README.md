@@ -1,1 +1,0 @@
-# Kinoko-Takenoko
