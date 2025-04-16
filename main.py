@@ -9,13 +9,16 @@ from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Dense, GlobalAveragePooling2D
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.preprocessing import image
+import cv2
+from augmentations import get_augmentations
+import albumentations as A
 
 # === 設定ファイル読み込み ===
 with open("config.json", "r") as f:
     config = json.load(f)
 
 # === 設定値の読み込み ===
-AUGMENTATIONS = config["augmentations"]  # 今後の拡張で使う予定
+AUGMENTATION_NAMES = config["augmentations"]
 NUM_AUGS = config["num_augmentations"]
 MODEL_NAME = config["model"]
 EPOCHS = config["epochs"]
@@ -26,12 +29,39 @@ CONFIDENCE_THRESH = config["confidence_threshold"]
 TRAIN_DIR = "data/train"
 TEST_DIR = "data/test"
 OUTPUT_DIR = "data/output"
+AUG_TRAIN_DIR = "data/train_aug"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
+os.makedirs(AUG_TRAIN_DIR, exist_ok=True)
+
+# === 前処理の取得 ===
+augmentations = get_augmentations(AUGMENTATION_NAMES)
+
+# === データ拡張の適用 ===
+def apply_augmentations_to_dataset():
+    for cls in os.listdir(TRAIN_DIR):
+        src_cls_path = os.path.join(TRAIN_DIR, cls)
+        dst_cls_path = os.path.join(AUG_TRAIN_DIR, cls)
+        os.makedirs(dst_cls_path, exist_ok=True)
+        for fname in os.listdir(src_cls_path):
+            src_path = os.path.join(src_cls_path, fname)
+            img = cv2.imread(src_path)
+            img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+            # 元画像もコピー
+            base_dst = os.path.join(dst_cls_path, fname)
+            cv2.imwrite(base_dst, cv2.cvtColor(img, cv2.COLOR_RGB2BGR))
+            for i in range(NUM_AUGS):
+                for aug in augmentations:
+                    aug_img = aug(image=img)["image"]
+                    aug_fname = f"{os.path.splitext(fname)[0]}_aug{i}_{aug.__class__.__name__}.jpg"
+                    aug_path = os.path.join(dst_cls_path, aug_fname)
+                    cv2.imwrite(aug_path, cv2.cvtColor(aug_img, cv2.COLOR_RGB2BGR))
+
+apply_augmentations_to_dataset()
 
 # === データジェネレータ ===
 datagen = ImageDataGenerator(preprocessing_function=preprocess_input)
 train_gen = datagen.flow_from_directory(
-    TRAIN_DIR,
+    AUG_TRAIN_DIR,
     target_size=(224, 224),
     batch_size=BATCH_SIZE,
     class_mode="categorical"
@@ -75,5 +105,4 @@ for fname in os.listdir(TEST_DIR):
     else:
         print(f"[NG] {fname} -> {label} ({conf:.2f})")
 
-print("\n推論完了\n\n正しく分類された画像は data/output に保存されました。")
-
+print("\n推論完了！ 正しく分類された画像は data/output に保存されました。")
