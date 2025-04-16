@@ -4,13 +4,12 @@ import json
 import numpy as np
 import shutil
 from tensorflow.keras.preprocessing.image import ImageDataGenerator, load_img, img_to_array
-from tensorflow.keras.applications.mobilenet_v2 import MobileNetV2, preprocess_input
-from tensorflow.keras.models import Model
-from tensorflow.keras.layers import Dense, GlobalAveragePooling2D
+from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.preprocessing import image
 import cv2
 from augmentations import get_augmentations
+from models import build_model
 import albumentations as A
 
 # === 設定ファイル読み込み ===
@@ -71,13 +70,8 @@ train_gen = datagen.flow_from_directory(
 class_indices = train_gen.class_indices
 class_labels = {v: k for k, v in class_indices.items()}
 
-# === モデル構築（MobileNetV2） ===
-base_model = MobileNetV2(weights="imagenet", include_top=False, input_shape=(224, 224, 3))
-x = base_model.output
-x = GlobalAveragePooling2D()(x)
-x = Dense(128, activation="relu")(x)
-predictions = Dense(len(class_labels), activation="softmax")(x)
-model = Model(inputs=base_model.input, outputs=predictions)
+# === モデル構築（外部ファイルから） ===
+model = build_model(MODEL_NAME, num_classes=len(class_labels))
 model.compile(optimizer=Adam(), loss="categorical_crossentropy", metrics=["accuracy"])
 
 # === 学習 ===
