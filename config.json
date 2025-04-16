@@ -1,1 +1,9 @@
+{
+  "augmentations": ["Rotate", "Blur"],           // 使用する前処理の種類（今後拡張）
+  "num_augmentations": 3,                        // 各画像から何枚拡張画像を作るか（未実装なら0でもOK）
+  "model": "MobileNetV2",                        // モデル名（今後ResNetやEfficientNetにも対応可）
+  "epochs": 5,                                   // 学習回数
+  "batch_size": 16,                              // 一度に処理する画像数
+  "confidence_threshold": 0.85                   // この確率以上で正解と見なす
+}
 
