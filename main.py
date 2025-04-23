@@ -99,6 +99,9 @@ for label in class_labels.values():
 # === 推論結果保存 + 結果収集 ===
 results = []
 
+# === 画像ファイル拡張子の定義 ===
+VALID_EXTENSIONS = [".jpg", ".jpeg", ".png", ".bmp", ".gif"]
+
 for fname in os.listdir(TEST_DIR):
 
     if not any(fname.lower().endswith(ext) for ext in VALID_EXTENSIONS):
