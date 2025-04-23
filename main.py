@@ -100,6 +100,11 @@ for label in class_labels.values():
 results = []
 
 for fname in os.listdir(TEST_DIR):
+
+    if not any(fname.lower().endswith(ext) for ext in VALID_EXTENSIONS):
+        print(f"[SKIP] {fname} は画像ファイルではありません。")
+        continue
+        
     img_path = os.path.join(TEST_DIR, fname)
     label, conf = predict_image(img_path)
     results.append((fname, label, conf))
