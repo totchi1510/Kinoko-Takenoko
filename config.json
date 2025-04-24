@@ -1,9 +1,9 @@
 {
-  "augmentations": ["Rotate", "Blur","Sharpen","RandomScale"],         
-  "num_augmentations": 5,                       
-  "model": "MobileNetV2",                       
+  "augmentations": ["", "","",""],         
+  "num_augmentations": 3,                       
+  "model": "SimpleCNN",                       
   "epochs": 3,                                  
-  "batch_size": 32,                              
+  "batch_size": 16,                              
   "confidence_threshold": 0.85                 
 }
 
