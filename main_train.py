@@ -39,6 +39,19 @@ AUG_TRAIN_DIR = "data/train_aug"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 os.makedirs(AUG_TRAIN_DIR, exist_ok=True)
 
+# === 重複ファイル（リーク）削除 ===
+test_files = set(os.listdir(TEST_DIR))
+train_classes = ["kinoko", "takenoko"]
+
+for cls in train_classes:
+    train_cls_dir = os.path.join(TRAIN_DIR, cls)
+    for fname in os.listdir(train_cls_dir):
+        if fname in test_files:
+            file_path = os.path.join(train_cls_dir, fname)
+            os.remove(file_path)
+            print(f"[REMOVED] 重複ファイルを削除: {file_path}")
+
+
 # === 前処理の取得 ===
 augmentations = get_augmentations(AUGMENTATION_NAMES)
 
