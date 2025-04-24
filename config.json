@@ -1,6 +1,6 @@
 {
-  "augmentations": ["Rotate", "Blur","Sharpen"],         
-  "num_augmentations": 3,                       
+  "augmentations": ["Rotate", "Blur","Sharpen","RandomScale"],         
+  "num_augmentations": 5,                       
   "model": "EfficientNetB0",                       
   "epochs": 5,                                  
   "batch_size": 16,                              
