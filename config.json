@@ -1,9 +1,9 @@
 {
   "augmentations": ["Rotate", "Blur","Sharpen","RandomScale"],         
   "num_augmentations": 5,                       
-  "model": "EfficientNetB0",                       
-  "epochs": 5,                                  
-  "batch_size": 16,                              
+  "model": "MobileNetV2",                       
+  "epochs": 3,                                  
+  "batch_size": 32,                              
   "confidence_threshold": 0.85                 
 }
 
