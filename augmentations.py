@@ -10,6 +10,8 @@ AUGMENTATION_OPTIONS = {
     "RandomBrightnessContrast": A.RandomBrightnessContrast(p=1.0),
     "GaussNoise": A.GaussNoise(p=1.0),
     "HueSaturationValue": A.HueSaturationValue(p=1.0)
+    "RandomScale": A.RandomScale(scale_limit=0.2, p=1.0)
+
 }
 
 # 指定された拡張名リストから、適用する拡張をリストで返す関数
