@@ -1,5 +1,5 @@
 {
-  "augmentations": ["Rotate", "Blur","Shape"],         
+  "augmentations": ["Rotate", "Blur","Sharpen"],         
   "num_augmentations": 3,                       
   "model": "MobileNetV2",                       
   "epochs": 5,                                  
