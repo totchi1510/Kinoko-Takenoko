@@ -9,7 +9,7 @@ AUGMENTATION_OPTIONS = {
     "Sharpen": A.Sharpen(p=1.0),
     "RandomBrightnessContrast": A.RandomBrightnessContrast(p=1.0),
     "GaussNoise": A.GaussNoise(p=1.0),
-    "HueSaturationValue": A.HueSaturationValue(p=1.0)
+    "HueSaturationValue": A.HueSaturationValue(p=1.0),
     "RandomScale": A.RandomScale(scale_limit=0.2, p=1.0)
 
 }
